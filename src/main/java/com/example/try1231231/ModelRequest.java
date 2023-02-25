@@ -4,17 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import weka.core.Attribute;
+import weka.core.Instance;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class ModelRequest {
-    private String algorithm;
     private String name;
-    private ArrayList<Attribute> attributes;
+    private String algorithm;
     private int capacity;
-    private String[] hyperparameters;
+    private List<AttributeRequest> attributes;
+   // private String[] hyperparameters;
+    private List<InstanceRequest> instances;
 }

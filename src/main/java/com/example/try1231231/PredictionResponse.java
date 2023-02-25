@@ -11,4 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 public class PredictionResponse {
     private List<String> labels;
+    private  double accuracy;
 }
