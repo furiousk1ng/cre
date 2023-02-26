@@ -1,4 +1,4 @@
-package com.example.try1231231;
+package com.example.ml.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

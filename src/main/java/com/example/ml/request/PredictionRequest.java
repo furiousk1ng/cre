@@ -1,12 +1,11 @@
-package com.example.try1231231;
+package com.example.ml.request;
 
+import com.example.ml.request.AttributeRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import weka.core.Attribute;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data

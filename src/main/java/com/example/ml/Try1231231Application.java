@@ -1,4 +1,4 @@
-package com.example.try1231231;
+package com.example.ml;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

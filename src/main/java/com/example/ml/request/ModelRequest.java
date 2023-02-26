@@ -1,12 +1,9 @@
-package com.example.try1231231;
+package com.example.ml.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import weka.core.Attribute;
-import weka.core.Instance;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
