@@ -17,6 +17,5 @@ public class ModelRequest {
     private String algorithm;
     private int capacity;
     private List<AttributeRequest> attributes;
-   // private String[] hyperparameters;
     private List<InstanceRequest> instances;
 }
