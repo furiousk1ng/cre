@@ -1,16 +1,21 @@
 package com.example.ml.classifiers;
 
 import com.example.ml.interfaces.MachineLearningAlgorithm;
-import weka.classifiers.Evaluation;
-import weka.classifiers.trees.J48;
+import weka.classifiers.bayes.NaiveBayes;
 import weka.core.Instance;
 import weka.core.Instances;
 
-public class DecisionTreeClassifier implements MachineLearningAlgorithm {
-    private final J48 classifier;
+import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.Evaluation;
+import weka.core.Instance;
+import weka.core.Instances;
 
-    public DecisionTreeClassifier() {
-        this.classifier = new J48();
+public class NaiveBayesClassifier implements MachineLearningAlgorithm {
+
+    private NaiveBayes classifier;
+
+    public NaiveBayesClassifier() {
+        this.classifier = new NaiveBayes();
     }
 
     @Override
@@ -28,12 +33,13 @@ public class DecisionTreeClassifier implements MachineLearningAlgorithm {
         return classifier.distributionForInstance(instance);
     }
 
-    @Override
-    public Evaluation evaluateModel(Instances data) throws Exception {
-        Evaluation eval = new Evaluation(data);
-        eval.evaluateModel(classifier, data);
+
+    public Evaluation evaluateModel(Instances testData) throws Exception {
+        Evaluation eval = new Evaluation(testData);
+        eval.evaluateModel(this.classifier, testData);
         return eval;
     }
+    public void setOptions(String[] options) throws Exception {
+        this.classifier.setOptions(options);
+    }
 }
-
-

@@ -1,12 +1,14 @@
 package com.example.ml.service;
 
 
-import com.example.ml.classifiers.Algorithms;
+import com.example.ml.classifiers.*;
+import com.example.ml.interfaces.MachineLearningAlgorithm;
 import com.example.ml.request.InstanceRequest;
 import com.example.ml.request.ModelRequest;
 import com.example.ml.request.AttributeRequest;
 import com.example.ml.request.PredictionRequest;
 import com.example.ml.response.PredictionResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
@@ -73,7 +75,15 @@ public class ModelService {
         }
 
         // Parse attributes
-        ArrayList<Attribute> attInfo = parseAttr(request);
+        ArrayList<Attribute> attInfo = new ArrayList<>();
+        for (AttributeRequest attribute : request.getAttributes()) {
+            if (attribute.getType().equals("numeric")) {
+                attInfo.add(new Attribute(attribute.getName()));
+            } else if (attribute.getType().equals("nominal")) {
+                ArrayList<String> nominalValues = new ArrayList<>(attribute.getNominalValues());
+                attInfo.add(new Attribute(attribute.getName(), nominalValues));
+            }
+        }
 
         // Create instances
         Instances instances = new Instances(request.getName(), attInfo, 1);
@@ -104,7 +114,7 @@ public class ModelService {
         Evaluation evaluation = new Evaluation(instances);
         evaluation.evaluateModel(classifier, instances);
 
-        // Get probabilities (if available)
+
         double[] probabilities = null;
         if (classAttribute.isNominal()) {
             int predictionIndex = (int) prediction;
@@ -143,29 +153,36 @@ public class ModelService {
     }
 
     public Classifier createClassifier(ModelRequest request) throws Exception {
-        Classifier classifier = null;
+       Classifier classifier = null;
         switch (request.getAlgorithm()) {
             case "J48":
                 classifier = new J48();
-                //((J48) classifier).setOptions(request.getHyperparameters());
+                if (request.getHyperparameters() != null) {
+                    for (HyperParameter param : request.getHyperparameters()) {
+                        ((J48) classifier).setOptions(new String[]{param.getName(), param.getValue()});
+                    }
+                }
                 break;
             case "NaiveBayes":
                 classifier = new NaiveBayes();
-                // ((NaiveBayes) classifier).setOptions(request.getHyperparameters());
+                if (request.getHyperparameters() != null) {
+                    for (HyperParameter param : request.getHyperparameters()) {
+                        ((NaiveBayes) classifier).setOptions(new String[]{param.getName(), param.getValue()});
+                    }
+                }
                 break;
             case "RandomForest":
                 classifier = new RandomForest();
-                try {
-                    ((RandomForest) classifier).setOptions(weka.core.Utils.splitOptions("-I 100 -K 10"));
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                if (request.getHyperparameters() != null) {
+                    for (HyperParameter param : request.getHyperparameters()) {
+                        ((RandomForest) classifier).setOptions(new String[]{param.getName(), param.getValue()});
+                    }
                 }
-                //((RandomForest) classifier).setOptions(request.getHyperparameters());
                 break;
-            // добавьте другие алгоритмы здесь
             default:
                 throw new Exception("Invalid algorithm");
         }
         return classifier;
     }
+
 }

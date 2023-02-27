@@ -9,4 +9,7 @@ public interface MachineLearningAlgorithm {
     double classifyInstance(Instance instance) throws Exception;
     double[] distributionForInstance(Instance instance) throws Exception;
     Evaluation evaluateModel(Instances data) throws Exception;
+   void setOptions(String[] options) throws Exception;
+
+
 }
